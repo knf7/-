@@ -10,6 +10,7 @@ interface CoursesProps {
   isDayMode?: boolean;
   onOpenFeedForCourse: (courseId: string) => void;
   onOpenAddFiles: (courseId: string) => void;
+  onOpenCustomizeInterests?: () => void;
 }
 
 export const Courses: React.FC<CoursesProps> = ({
@@ -19,6 +20,7 @@ export const Courses: React.FC<CoursesProps> = ({
   isDayMode = false,
   onOpenFeedForCourse,
   onOpenAddFiles,
+  onOpenCustomizeInterests,
 }) => {
   const activeCourses = COURSES.filter((c) => selectedCourseIds.includes(c.id));
   const primaryCourse = activeCourses[0] || COURSES[0];
@@ -34,11 +36,25 @@ export const Courses: React.FC<CoursesProps> = ({
       isDayMode ? 'bg-[#F2F6F3] text-[#102318]' : 'bg-[#0E100F] text-[#F1EDE5]'
     }`}>
       {/* Title */}
-      <h1 className={`text-2xl sm:text-3xl font-bold tracking-tight mb-2 leading-snug ${
-        isDayMode ? 'text-[#0E2116]' : 'text-[#F1EDE5]'
-      }`}>
-        موادي
-      </h1>
+      <div className="flex items-center justify-between mb-2">
+        <h1 className={`text-2xl sm:text-3xl font-bold tracking-tight leading-snug ${
+          isDayMode ? 'text-[#0E2116]' : 'text-[#F1EDE5]'
+        }`}>
+          موادي
+        </h1>
+        {onOpenCustomizeInterests && (
+          <button
+            onClick={onOpenCustomizeInterests}
+            className={`px-3 py-1.5 rounded-full text-xs font-semibold border flex items-center gap-1.5 transition-all cursor-pointer ${
+              isDayMode
+                ? 'bg-white border-[#D4E0D8] text-[#1E3E2B] hover:bg-[#EBF2EC]'
+                : 'bg-[#181D1A] border-[#2A312D] text-[#D8DFDB] hover:bg-[#202723]'
+            }`}
+          >
+            <span>تخصيص المواد</span>
+          </button>
+        )}
+      </div>
       <p className={`text-sm leading-relaxed mb-8 ${
         isDayMode ? 'text-[#486353]' : 'text-[#8C928E]'
       }`}>

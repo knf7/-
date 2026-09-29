@@ -15,6 +15,7 @@ interface ProfileProps {
   onOpenOnboarding?: () => void;
   onOpenLogin?: () => void;
   onLogout?: () => void;
+  onOpenCustomizeInterests?: () => void;
 }
 
 export const Profile: React.FC<ProfileProps> = ({
@@ -29,6 +30,7 @@ export const Profile: React.FC<ProfileProps> = ({
   onOpenOnboarding,
   onOpenLogin,
   onLogout,
+  onOpenCustomizeInterests,
 }) => {
   const [showResetConfirm, setShowResetConfirm] = useState(false);
   const courses = COURSES.filter((c) => selectedCourseIds.includes(c.id));
@@ -223,14 +225,21 @@ export const Profile: React.FC<ProfileProps> = ({
         )}
 
         {/* تفضيلات التعلم */}
-        <div className={`p-4 rounded-xl border flex items-center justify-between shadow-xs ${
-          isDayMode ? 'bg-white border-[#D4E0D8]' : 'bg-[#151917] border-[#262D29]'
-        }`}>
+        <div
+          onClick={onOpenCustomizeInterests}
+          className={`p-4 rounded-xl border flex items-center justify-between shadow-xs transition-colors ${
+            onOpenCustomizeInterests ? 'cursor-pointer hover:border-[#29543C]' : ''
+          } ${
+            isDayMode ? 'bg-white border-[#D4E0D8]' : 'bg-[#151917] border-[#262D29]'
+          }`}
+        >
           <div className="flex items-center gap-2.5">
             <Sliders className={`w-4 h-4 ${isDayMode ? 'text-[#29543C]' : 'text-[#58675F]'}`} />
-            <span className={`text-sm font-semibold ${isDayMode ? 'text-[#0E2116]' : 'text-[#F1EDE5]'}`}>تفضيلات التعلم</span>
+            <span className={`text-sm font-semibold ${isDayMode ? 'text-[#0E2116]' : 'text-[#F1EDE5]'}`}>تفضيلات التعلم والمواد</span>
           </div>
-          <span className={`text-xs ${isDayMode ? 'text-[#4A6E58]' : 'text-[#8C928E]'}`}>سريع ومختصر</span>
+          <span className={`text-xs ${isDayMode ? 'text-[#4A6E58]' : 'text-[#8C928E]'}`}>
+            {onOpenCustomizeInterests ? 'تخصيص ←' : 'سريع ومختصر'}
+          </span>
         </div>
 
         {/* الإعدادات */}

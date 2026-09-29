@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useState, useCallback } from 'react';
 import { Concept } from '../types';
 import { Reel } from './Reel';
 import { StatusBar } from './StatusBar';
-import { ChevronUp, ChevronDown, Sun, Moon } from 'lucide-react';
+import { ChevronUp, ChevronDown, Sun, Moon, Sparkles } from 'lucide-react';
 
 interface FeedProps {
   concepts: Concept[];
@@ -16,6 +16,7 @@ interface FeedProps {
   onOpenAsk: (concept: Concept) => void;
   onOpenSource: (concept: Concept) => void;
   onOpenMore: (concept: Concept) => void;
+  onOpenCustomizeInterests?: () => void;
 }
 
 export const Feed: React.FC<FeedProps> = ({
@@ -30,6 +31,7 @@ export const Feed: React.FC<FeedProps> = ({
   onOpenAsk,
   onOpenSource,
   onOpenMore,
+  onOpenCustomizeInterests,
 }) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [feedMode, setFeedMode] = useState<'forYou' | 'following'>('forYou');
@@ -163,8 +165,23 @@ export const Feed: React.FC<FeedProps> = ({
 
       {/* 2. AUTHENTIC TIKTOK / INSTAGRAM REELS TOP BAR - CLEAN & UNCLUTTERED */}
       <header className="absolute top-10 inset-x-0 z-40 px-4 pt-1 flex items-center justify-between pointer-events-none select-none">
-        {/* Left placeholder for symmetric spacing */}
-        <div className="w-8 h-8 pointer-events-none" />
+        {/* Left button: Customize Interests or placeholder */}
+        {onOpenCustomizeInterests ? (
+          <button
+            onClick={onOpenCustomizeInterests}
+            className={`w-8 h-8 rounded-full flex items-center justify-center active:scale-90 transition-all cursor-pointer pointer-events-auto ${
+              isDayMode 
+                ? 'text-[#1B3E2A] hover:bg-black/5' 
+                : 'text-white/85 hover:bg-white/10'
+            }`}
+            title="تخصيص المواد والاهتمامات"
+            aria-label="تخصيص المواد"
+          >
+            <Sparkles className="w-4 h-4 text-emerald-500" />
+          </button>
+        ) : (
+          <div className="w-8 h-8 pointer-events-none" />
+        )}
 
         {/* Center: Pure Typographic Reels Switcher (متابعة | لك) - Just like TikTok */}
         <div className="pointer-events-auto flex items-center gap-4">

@@ -26,6 +26,8 @@ import {
 interface AuthProps {
   onLoginSuccess: (user: UserProfile) => void;
   onSkip: () => void;
+  onDirectTrial?: () => void;
+  onCustomizeInterests?: () => void;
   isDayMode?: boolean;
   onToggleDayMode?: () => void;
 }
@@ -35,6 +37,8 @@ type AuthMode = 'signin' | 'signup' | 'otp' | 'forgot';
 export const Auth: React.FC<AuthProps> = ({
   onLoginSuccess,
   onSkip,
+  onDirectTrial,
+  onCustomizeInterests,
   isDayMode = false,
   onToggleDayMode,
 }) => {
