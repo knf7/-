@@ -20,7 +20,14 @@ const STORAGE_KEY = 'scroll_it_state_v2';
 
 export function App() {
   // Persistent or default state
-  const [onboardingCompleted, setOnboardingCompleted] = useState<boolean>(false);
+  const [onboardingCompleted, setOnboardingCompleted] = useState<boolean>(() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      return saved ? JSON.parse(saved).onboardingCompleted ?? false : false;
+    } catch {
+      return false;
+    }
+  });
 
   // Current logged in student profile
   const [currentUser, setCurrentUser] = useState<UserProfile | null>(() => {
@@ -376,6 +383,8 @@ export function App() {
   const handleOnboardingComplete = (major: string, courses: string[]) => {
     setSelectedMajor(major);
     setSelectedCourses(courses);
+    setOnboardingCompleted(true);
+    setActiveTab('feed');
   };
 
   // Auth completion & Skip handlers
