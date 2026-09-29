@@ -23,12 +23,10 @@ export function App() {
   const [onboardingCompleted, setOnboardingCompleted] = useState<boolean>(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        return parsed.onboardingCompleted ?? false;
-      }
-    } catch {}
-    return false;
+      return saved ? JSON.parse(saved).onboardingCompleted ?? false : false;
+    } catch {
+      return false;
+    }
   });
 
   // Current logged in student profile
@@ -48,8 +46,7 @@ export function App() {
     };
   });
 
-  // User requested to be put directly into the Login User Journey
-  const [isAuthActive, setIsAuthActive] = useState<boolean>(true);
+  const [isAuthActive, setIsAuthActive] = useState<boolean>(false);
 
   const [isDayMode, setIsDayMode] = useState<boolean>(() => {
     try {
@@ -58,7 +55,7 @@ export function App() {
         return JSON.parse(saved);
       }
     } catch {}
-    return true; // Default to Day mode as explicitly requested by user
+    return false;
   });
 
   const handleToggleDayMode = useCallback(() => {
@@ -403,7 +400,6 @@ export function App() {
     setIsAuthActive(false);
   };
 
-  // Direct fast trial handler
   const handleStartDirectTrial = () => {
     setIsAuthActive(false);
     setOnboardingCompleted(true);
@@ -428,7 +424,7 @@ export function App() {
     }
   };
 
-  const isCurrentScreenDayMode = isDayMode;
+  const isCurrentScreenDayMode = isDayMode && onboardingCompleted;
 
   return (
     <div className={`w-full min-h-[100dvh] flex items-center justify-center p-0 md:py-6 overflow-x-hidden font-sans transition-colors duration-500 ${
