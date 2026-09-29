@@ -28,7 +28,6 @@ export const Reel: React.FC<ReelProps> = ({
   onOpenMore,
 }) => {
   const seenTimerRef = useRef<NodeJS.Timeout | null>(null);
-  const [progress, setProgress] = useState<number>(0);
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
   const [isFollowing, setIsFollowing] = useState<boolean>(false);
   const [showHeartAnimation, setShowHeartAnimation] = useState<boolean>(false);
@@ -52,20 +51,6 @@ export const Reel: React.FC<ReelProps> = ({
       }
     };
   }, [isActive, concept.id, concept.seen, onMarkSeen]);
-
-  // Video progress scrubber animation simulation
-  useEffect(() => {
-    if (!isActive) {
-      setProgress(0);
-      return;
-    }
-
-    const interval = setInterval(() => {
-      setProgress((prev) => (prev >= 100 ? 0 : prev + 1.2));
-    }, 120);
-
-    return () => clearInterval(interval);
-  }, [isActive]);
 
   const handleDoubleTap = () => {
     onToggleSave(concept.id);
@@ -108,6 +93,9 @@ export const Reel: React.FC<ReelProps> = ({
           ? 'bg-gradient-to-t from-[#E2EBE4]/95 via-[#E2EBE4]/60 to-transparent' 
           : 'bg-gradient-to-t from-black/90 via-black/50 to-transparent'
       }`} />
+
+      {/* A quiet outline keeps the portrait clip distinct from the feed chrome. */}
+      <div className="absolute inset-x-3 top-[78px] bottom-[150px] z-20 pointer-events-none rounded-[24px] border border-[#DDE8DB]/35 ring-1 ring-black/25 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.04)]" />
 
       {/* 4. VERTICAL ACTION RAIL ON THE RIGHT (نفس أزرار الإنستا والتيكتوك) */}
       <div className="absolute bottom-[72px] right-3 z-30 flex flex-col items-center">
@@ -204,19 +192,6 @@ export const Reel: React.FC<ReelProps> = ({
         </div>
       </div>
 
-      {/* 6. BOTTOM VIDEO SCRUBBER PROGRESS LINE */}
-      <div className={`absolute bottom-[57px] inset-x-0 h-[2px] z-30 pointer-events-none ${
-        isDayMode ? 'bg-black/10' : 'bg-white/20'
-      }`}>
-        <div 
-          className={`h-full transition-all duration-100 ease-linear ${
-            isDayMode 
-              ? 'bg-[#183626] shadow-[0_0_8px_rgba(24,54,38,0.6)]' 
-              : 'bg-white shadow-[0_0_8px_rgba(255,255,255,0.8)]'
-          }`}
-          style={{ width: `${progress}%` }}
-        />
-      </div>
     </div>
   );
 };

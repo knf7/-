@@ -2,7 +2,6 @@ import React, { useRef, useEffect, useState, useCallback } from 'react';
 import { Concept } from '../types';
 import { Reel } from './Reel';
 import { StatusBar } from './StatusBar';
-import { ChevronUp, ChevronDown, Sun, Moon, Sparkles } from 'lucide-react';
 
 interface FeedProps {
   concepts: Concept[];
@@ -34,8 +33,8 @@ export const Feed: React.FC<FeedProps> = ({
   onOpenCustomizeInterests,
 }) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const initialReelIndex = useRef(activeReelIndex);
   const [feedMode, setFeedMode] = useState<'forYou' | 'following'>('forYou');
-  const touchStartY = useRef<number | null>(null);
 
   const scrollToReel = useCallback((index: number) => {
     if (!containerRef.current) return;
@@ -45,13 +44,12 @@ export const Feed: React.FC<FeedProps> = ({
     }
   }, []);
 
-  // Ensure container is scrolled to activeReelIndex on mount or external tab switch
+  // Restore the requested reel when returning from another tab. Native scrolling
+  // controls subsequent navigation; re-scrolling after intersection updates jumps clips.
   useEffect(() => {
-    const timer = setTimeout(() => {
-      scrollToReel(activeReelIndex);
-    }, 50);
+    const timer = setTimeout(() => scrollToReel(initialReelIndex.current), 50);
     return () => clearTimeout(timer);
-  }, [activeReelIndex, scrollToReel]);
+  }, [scrollToReel]);
 
   // Handle intersection observer to reliably detect which reel is in view
   useEffect(() => {
@@ -103,36 +101,11 @@ export const Feed: React.FC<FeedProps> = ({
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [activeReelIndex, concepts.length, scrollToReel]);
 
-  // Touch swipe fallback for mobile touch devices
-  const handleTouchStart = (e: React.TouchEvent) => {
-    touchStartY.current = e.touches[0].clientY;
-  };
-
-  const handleTouchEnd = (e: React.TouchEvent) => {
-    if (touchStartY.current === null) return;
-    const diff = touchStartY.current - e.changedTouches[0].clientY;
-
-    if (Math.abs(diff) > 45) {
-      if (diff > 0) {
-        // Swiped up -> next reel
-        const next = Math.min(activeReelIndex + 1, concepts.length - 1);
-        scrollToReel(next);
-      } else {
-        // Swiped down -> previous reel
-        const prev = Math.max(activeReelIndex - 1, 0);
-        scrollToReel(prev);
-      }
-    }
-    touchStartY.current = null;
-  };
-
   return (
     <div 
       className={`relative w-full h-full overflow-hidden select-none transition-colors duration-500 ${
         isDayMode ? 'bg-[#F2F6F3]' : 'bg-[#0E100F]'
       }`}
-      onTouchStart={handleTouchStart}
-      onTouchEnd={handleTouchEnd}
     >
       {/* Subtle organic undulating olive waves in Day mode */}
       {isDayMode && (
@@ -199,35 +172,7 @@ export const Feed: React.FC<FeedProps> = ({
         </div>
       </header>
 
-      {/* 3. DESKTOP HELPER CHEVRONS (Subtle, Floating on Left Edge) */}
-      <div className="hidden md:flex flex-col gap-2 absolute left-4 top-1/2 -translate-y-1/2 z-30 opacity-40 hover:opacity-100 transition-opacity">
-        <button
-          onClick={() => scrollToReel(Math.max(activeReelIndex - 1, 0))}
-          disabled={activeReelIndex === 0}
-          className={`w-9 h-9 rounded-full backdrop-blur-md disabled:opacity-20 flex items-center justify-center transition-colors cursor-pointer ${
-            isDayMode 
-              ? 'bg-white/80 border border-white/90 text-[#14281D] hover:bg-white' 
-              : 'bg-black/50 border border-white/15 text-[#F1EDE5] hover:bg-black/70'
-          }`}
-          aria-label="السابق"
-        >
-          <ChevronUp className="w-4 h-4" />
-        </button>
-        <button
-          onClick={() => scrollToReel(Math.min(activeReelIndex + 1, concepts.length - 1))}
-          disabled={activeReelIndex === concepts.length - 1}
-          className={`w-9 h-9 rounded-full backdrop-blur-md disabled:opacity-20 flex items-center justify-center transition-colors cursor-pointer ${
-            isDayMode 
-              ? 'bg-white/80 border border-white/90 text-[#14281D] hover:bg-white' 
-              : 'bg-black/50 border border-white/15 text-[#F1EDE5] hover:bg-black/70'
-          }`}
-          aria-label="التالي"
-        >
-          <ChevronDown className="w-4 h-4" />
-        </button>
-      </div>
-
-      {/* 4. MAIN REELS SCROLL CONTAINER */}
+      {/* Native vertical scrolling and scroll snap move between reels. */}
       <main 
         ref={containerRef}
         role="feed"
