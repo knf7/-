@@ -1,0 +1,6 @@
+{
+  "name": "Scroll It | سكرول إت",
+  "description": "خلاصة ريلز أكاديمية ذكية ومخصصة لموادك الجامعية - A private personalized academic reels feed.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
