@@ -32,26 +32,18 @@ export const TwoNFSimpleVisual: React.FC<VisualProps> = ({ isActive, isDayMode =
 
   return (
     <div 
-      className={`w-full h-full flex flex-col items-center justify-center pt-8 pb-32 px-4 select-none text-left relative overflow-hidden transition-colors duration-500 ${
-        isDayMode 
-          ? 'bg-gradient-to-b from-[#E7EFEA] via-[#DFE9E3] to-[#D5E1DA]' 
-          : 'bg-gradient-to-b from-[#18261F] via-[#121E18] to-[#0D1511]'
-      }`} 
+      className="w-full h-full flex flex-col items-center justify-center pt-8 pb-32 px-4 select-none text-left relative overflow-hidden bg-gradient-to-b from-[#16271F] via-[#101C15] to-[#0A120E]" 
       dir="ltr"
     >
       <div 
-        className="absolute inset-0 opacity-20 pointer-events-none"
+        className="absolute inset-0 opacity-25 pointer-events-none"
         style={{
-          backgroundImage: `radial-gradient(${isDayMode ? '#4A6B58' : '#729882'} 1px, transparent 1px)`,
+          backgroundImage: 'radial-gradient(#6E987F 1px, transparent 1px)',
           backgroundSize: '20px 20px'
         }}
       />
 
-      <div className={`w-full max-w-sm relative z-10 flex flex-col items-center rounded-2xl p-5 transition-all duration-300 ${
-        isDayMode 
-          ? 'bg-white/80 backdrop-blur-2xl border border-white shadow-[0_20px_45px_rgba(30,55,40,0.15)]' 
-          : 'bg-[#15211B]/90 backdrop-blur-2xl border border-[#3C5747] shadow-[0_25px_60px_rgba(0,0,0,0.7)]'
-      }`}>
+      <div className="w-full max-w-sm relative z-10 flex flex-col items-center rounded-2xl p-5 transition-all duration-300 bg-[#14211A]/95 backdrop-blur-2xl border border-white/20 shadow-[0_25px_60px_rgba(0,0,0,0.85)]">
         {/* Step indicator */}
         <div className={`px-3 py-1 rounded-full border text-[11px] font-mono font-bold mb-5 ${
           isDayMode ? 'border-[#3D6E50] bg-[#E8F4EE] text-[#1E5232]' : 'border-[#4D7E63] bg-[#16271E] text-[#7FD6A4]'

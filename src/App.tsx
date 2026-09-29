@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { Concept, TabType, QuizQuestion, Flashcard, UserProfile } from './types';
 import { INITIAL_CONCEPTS, REINFORCEMENT_CONCEPTS, QUIZ_QUESTIONS, FLASHCARDS } from './data/concepts';
-import { Auth } from './components/Auth';
 import { Onboarding } from './components/Onboarding';
 import { Feed } from './components/Feed';
 import { BottomNav } from './components/BottomNav';
@@ -29,7 +28,7 @@ export function App() {
     }
   });
 
-  // Current logged in student profile
+  // Current logged in student profile (Prototype student)
   const [currentUser, setCurrentUser] = useState<UserProfile | null>(() => {
     try {
       const saved = localStorage.getItem('scroll_it_user');
@@ -37,16 +36,14 @@ export function App() {
     } catch {}
     return {
       id: 'student_1',
-      name: 'طالب جامعي',
-      emailOrPhone: '442019876@student.ksu.edu.sa',
+      name: 'سلطان القحطاني',
+      emailOrPhone: 'sultan.q@student.ksu.edu.sa',
       university: 'جامعة الملك سعود (KSU)',
       collegeOrMajor: 'علوم الحاسب والذكاء الاصطناعي',
-      avatarLetter: 'ط',
-      isLoggedIn: false,
+      avatarLetter: 'س',
+      isLoggedIn: true,
     };
   });
-
-  const [isAuthActive, setIsAuthActive] = useState<boolean>(false);
 
   const [isDayMode, setIsDayMode] = useState<boolean>(() => {
     try {
@@ -387,25 +384,6 @@ export function App() {
     setActiveTab('feed');
   };
 
-  // Auth completion & Skip handlers
-  const handleLoginSuccess = (user: UserProfile) => {
-    setCurrentUser(user);
-    try {
-      localStorage.setItem('scroll_it_user', JSON.stringify(user));
-    } catch {}
-    setIsAuthActive(false);
-  };
-
-  const handleAuthSkip = () => {
-    setIsAuthActive(false);
-  };
-
-  const handleStartDirectTrial = () => {
-    setIsAuthActive(false);
-    setOnboardingCompleted(true);
-    setActiveTab('feed');
-  };
-
   // Save customized interests
   const handleSaveCustomizedInterests = (major: string, courses: string[]) => {
     setSelectedMajor(major);
@@ -437,22 +415,11 @@ export function App() {
           : 'bg-[#0E100F] md:border md:border-[#262D29] md:shadow-[0_25px_60px_-15px_rgba(0,0,0,0.9)]'
       }`}>
         
-        {/* 1. Login User Journey (Active by default as requested by user) */}
-        {isAuthActive ? (
-          <Auth
-            onLoginSuccess={handleLoginSuccess}
-            onSkip={handleAuthSkip}
-            onDirectTrial={handleStartDirectTrial}
-            onCustomizeInterests={() => setIsCustomizeInterestsOpen(true)}
-            isDayMode={isDayMode}
-            onToggleDayMode={handleToggleDayMode}
-          />
-        ) : !onboardingCompleted ? (
-          /* 2. Onboarding Flow if not completed */
+        {!onboardingCompleted ? (
+          /* 1. Onboarding Flow if not completed */
           <Onboarding
             onComplete={handleOnboardingComplete}
             isDayMode={isDayMode}
-            onOpenLogin={() => setIsAuthActive(true)}
           />
         ) : isQuizActive ? (
           /* 2. Active Quiz Screen */
@@ -472,7 +439,7 @@ export function App() {
           />
         ) : (
           /* 4. Main Tab Content */
-          <div className="relative w-full h-full flex flex-col">
+          <div className="relative w-full h-full flex flex-col flex-1 min-h-0 overflow-hidden">
             {activeTab === 'feed' && (
               <Feed
                 concepts={activeFeedConcepts}
@@ -529,15 +496,7 @@ export function App() {
                 onToggleDayMode={handleToggleDayMode}
                 onResetDemo={handleResetDemo}
                 onOpenOnboarding={() => setOnboardingCompleted(false)}
-                onOpenLogin={() => setIsAuthActive(true)}
                 onOpenCustomizeInterests={() => setIsCustomizeInterestsOpen(true)}
-                onLogout={() => {
-                  setCurrentUser(null);
-                  try {
-                    localStorage.removeItem('scroll_it_user');
-                  } catch {}
-                  setIsAuthActive(true);
-                }}
                 onSelectSavedConcept={(conceptId) => {
                   const idx = activeFeedConcepts.findIndex((c) => c.id === conceptId);
                   if (idx !== -1) {

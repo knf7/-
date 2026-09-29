@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Concept, UserProfile } from '../types';
 import { COURSES } from '../data/courses';
-import { Bookmark, FileText, Settings, Sliders, RefreshCw, BookOpen, Sun, Moon, LogIn, LogOut, CheckCircle } from 'lucide-react';
+import { Bookmark, FileText, Settings, Sliders, RefreshCw, BookOpen, Sun, Moon, CheckCircle, Sparkles } from 'lucide-react';
 
 interface ProfileProps {
   savedConcepts: Concept[];
@@ -13,8 +13,6 @@ interface ProfileProps {
   onResetDemo: () => void;
   onSelectSavedConcept?: (conceptId: string) => void;
   onOpenOnboarding?: () => void;
-  onOpenLogin?: () => void;
-  onLogout?: () => void;
   onOpenCustomizeInterests?: () => void;
 }
 
@@ -28,15 +26,13 @@ export const Profile: React.FC<ProfileProps> = ({
   onResetDemo,
   onSelectSavedConcept,
   onOpenOnboarding,
-  onOpenLogin,
-  onLogout,
   onOpenCustomizeInterests,
 }) => {
   const [showResetConfirm, setShowResetConfirm] = useState(false);
   const courses = COURSES.filter((c) => selectedCourseIds.includes(c.id));
 
   return (
-    <div className={`min-h-[100dvh] pt-12 pb-28 px-5 max-w-[420px] mx-auto select-none transition-colors duration-500 ${
+    <div className={`w-full h-full overflow-y-auto overscroll-contain pt-10 pb-36 px-5 max-w-[420px] mx-auto select-none transition-colors duration-500 no-scrollbar ${
       isDayMode ? 'bg-[#F2F6F3] text-[#102318]' : 'bg-[#0E100F] text-[#F1EDE5]'
     }`}>
       {/* Title */}
@@ -63,16 +59,14 @@ export const Profile: React.FC<ProfileProps> = ({
               ? 'bg-[#1D4A33] border-[#2A6546] text-white' 
               : 'bg-[#203029] border-[#58675F] text-[#F1EDE5]'
           }`}>
-            {currentUser?.avatarLetter || 'ط'}
+            {currentUser?.avatarLetter || 'س'}
           </div>
           <div>
             <div className="flex items-center gap-1.5">
               <span className={`text-sm font-bold ${isDayMode ? 'text-[#0E2116]' : 'text-[#F1EDE5]'}`}>
-                {currentUser?.name || 'طالب جامعي'}
+                {currentUser?.name || 'سلطان القحطاني'}
               </span>
-              {currentUser?.isLoggedIn && (
-                <CheckCircle className="w-3.5 h-3.5 text-emerald-500 inline" />
-              )}
+              <CheckCircle className="w-3.5 h-3.5 text-emerald-500 inline" />
             </div>
             <div className={`text-xs font-mono ${isDayMode ? 'text-[#4A6E58]' : 'text-[#8C928E]'}`}>
               {currentUser?.university || 'جامعة الملك سعود'} · {currentUser?.collegeOrMajor || 'علوم الحاسب'}
@@ -85,20 +79,15 @@ export const Profile: React.FC<ProfileProps> = ({
           </div>
         </div>
 
-        {/* Login / Switch Account Action Button */}
-        {onOpenLogin && (
-          <button
-            onClick={onOpenLogin}
-            className={`px-3 py-1.5 rounded-full text-xs font-semibold flex items-center gap-1 border transition-all cursor-pointer ${
-              isDayMode
-                ? 'bg-[#EBF2EC] text-[#183626] border-[#CCDCD1] hover:bg-[#DFECE3]'
-                : 'bg-[#1E2522] text-[#E0E6E2] border-[#39423D] hover:bg-[#28322D]'
-            }`}
-          >
-            <LogIn className="w-3 h-3" />
-            <span>{currentUser?.isLoggedIn ? 'تبديل' : 'دخول'}</span>
-          </button>
-        )}
+        {/* Prototype active badge */}
+        <div className={`px-2.5 py-1 rounded-full text-[11px] font-semibold flex items-center gap-1 border ${
+          isDayMode
+            ? 'bg-[#EBF2EC] text-[#183626] border-[#CCDCD1]'
+            : 'bg-[#1E2522] text-[#B9C2BC] border-[#39423D]'
+        }`}>
+          <Sparkles className="w-3 h-3 text-emerald-500" />
+          <span>بروتوتايب</span>
+        </div>
       </div>
 
       {/* Personal Sections List */}
@@ -252,24 +241,6 @@ export const Profile: React.FC<ProfileProps> = ({
           </div>
           <span className={`text-xs ${isDayMode ? 'text-[#4A6E58]' : 'text-[#8C928E]'}`}>العربية (RTL)</span>
         </div>
-
-        {/* رحلة تسجيل الدخول (Login Journey) */}
-        {onOpenLogin && (
-          <button
-            onClick={onOpenLogin}
-            className={`w-full p-4 rounded-xl border flex items-center justify-between transition-colors text-right cursor-pointer shadow-xs ${
-              isDayMode 
-                ? 'bg-white border-[#D4E0D8] hover:border-[#28543A]' 
-                : 'bg-[#151917] border-[#262D29] hover:border-[#39423D]'
-            }`}
-          >
-            <div className="flex items-center gap-2.5">
-              <LogIn className={`w-4 h-4 ${isDayMode ? 'text-[#29543C]' : 'text-[#58675F]'}`} />
-              <span className={`text-sm font-semibold ${isDayMode ? 'text-[#0E2116]' : 'text-[#F1EDE5]'}`}>رحلة تسجيل الدخول والحساب (Login Journey)</span>
-            </div>
-            <span className={`text-xs font-semibold ${isDayMode ? 'text-[#26533A]' : 'text-[#A0A7A2]'}`}>دخول &gt;</span>
-          </button>
-        )}
 
         {/* عرض شاشات التسجيل (Onboarding) */}
         {onOpenOnboarding && (

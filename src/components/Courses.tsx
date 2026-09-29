@@ -32,7 +32,7 @@ export const Courses: React.FC<CoursesProps> = ({
   const readyForReview = seenInPrimary; // seen concepts are review-ready
 
   return (
-    <div className={`min-h-[100dvh] pt-12 pb-28 px-5 max-w-[420px] mx-auto select-none transition-colors duration-500 ${
+    <div className={`w-full h-full overflow-y-auto overscroll-contain pt-10 pb-36 px-5 max-w-[420px] mx-auto select-none transition-colors duration-500 no-scrollbar ${
       isDayMode ? 'bg-[#F2F6F3] text-[#102318]' : 'bg-[#0E100F] text-[#F1EDE5]'
     }`}>
       {/* Title */}

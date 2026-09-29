@@ -164,82 +164,38 @@ export const Feed: React.FC<FeedProps> = ({
       </div>
 
       {/* 2. AUTHENTIC TIKTOK / INSTAGRAM REELS TOP BAR - CLEAN & UNCLUTTERED */}
-      <header className="absolute top-10 inset-x-0 z-40 px-4 pt-1 flex items-center justify-between pointer-events-none select-none">
-        {/* Left button: Customize Interests or placeholder */}
-        {onOpenCustomizeInterests ? (
-          <button
-            onClick={onOpenCustomizeInterests}
-            className={`w-8 h-8 rounded-full flex items-center justify-center active:scale-90 transition-all cursor-pointer pointer-events-auto ${
-              isDayMode 
-                ? 'text-[#1B3E2A] hover:bg-black/5' 
-                : 'text-white/85 hover:bg-white/10'
-            }`}
-            title="تخصيص المواد والاهتمامات"
-            aria-label="تخصيص المواد"
-          >
-            <Sparkles className="w-4 h-4 text-emerald-500" />
-          </button>
-        ) : (
-          <div className="w-8 h-8 pointer-events-none" />
-        )}
-
-        {/* Center: Pure Typographic Reels Switcher (متابعة | لك) - Just like TikTok */}
+      <header className="absolute top-10 inset-x-0 z-40 px-6 pt-1 flex items-center justify-center pointer-events-none select-none">
+        {/* Center: Pure Typographic Reels Switcher (متابعة | لك) - Exactly like TikTok */}
         <div className="pointer-events-auto flex items-center gap-4">
           <button
             onClick={() => setFeedMode('following')}
             className={`text-[16px] transition-all relative pb-1 cursor-pointer font-sans ${
               feedMode === 'following'
-                ? (isDayMode ? 'font-bold text-[#0E2416]' : 'font-bold text-white')
-                : (isDayMode ? 'font-medium text-[#648070] hover:text-[#183624]' : 'font-medium text-white/60 hover:text-white/85')
+                ? 'font-bold text-white drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]'
+                : 'font-medium text-white/65 hover:text-white drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]'
             }`}
           >
             متابعة
             {feedMode === 'following' && (
-              <span className={`absolute bottom-0 inset-x-1 h-[2px] rounded-full ${
-                isDayMode ? 'bg-[#143320]' : 'bg-white'
-              }`} />
+              <span className="absolute bottom-0 inset-x-1 h-[2px] rounded-full bg-white shadow-sm" />
             )}
           </button>
 
-          <span className={`text-xs opacity-30 select-none ${isDayMode ? 'text-[#143320]' : 'text-white'}`}>|</span>
+          <span className="text-xs opacity-40 select-none text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">|</span>
 
           <button
             onClick={() => setFeedMode('forYou')}
             className={`text-[16px] transition-all relative pb-1 cursor-pointer font-sans ${
               feedMode === 'forYou'
-                ? (isDayMode ? 'font-bold text-[#0E2416]' : 'font-bold text-white')
-                : (isDayMode ? 'font-medium text-[#648070] hover:text-[#183624]' : 'font-medium text-white/60 hover:text-white/85')
+                ? 'font-bold text-white drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]'
+                : 'font-medium text-white/65 hover:text-white drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]'
             }`}
           >
             لك
             {feedMode === 'forYou' && (
-              <span className={`absolute bottom-0 inset-x-1 h-[2px] rounded-full ${
-                isDayMode ? 'bg-[#143320]' : 'bg-white'
-              }`} />
+              <span className="absolute bottom-0 inset-x-1 h-[2px] rounded-full bg-white shadow-sm" />
             )}
           </button>
-        </div>
-
-        {/* Right: Single Minimal Day/Night Toggle Icon (Unobtrusive) */}
-        <div className="pointer-events-auto">
-          {onToggleDayMode && (
-            <button
-              onClick={onToggleDayMode}
-              className={`w-8 h-8 rounded-full flex items-center justify-center active:scale-90 transition-all cursor-pointer ${
-                isDayMode 
-                  ? 'text-[#1B3E2A] hover:bg-black/5' 
-                  : 'text-white/85 hover:bg-white/10'
-              }`}
-              title={isDayMode ? 'التبديل إلى الوضع الليلي' : 'التبديل إلى الوضع النهاري'}
-              aria-label="تبديل الوضع"
-            >
-              {isDayMode ? (
-                <Sun className="w-4 h-4 text-[#2E7448]" />
-              ) : (
-                <Moon className="w-4 h-4 text-[#F1EDE5]" />
-              )}
-            </button>
-          )}
         </div>
       </header>
 

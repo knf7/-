@@ -12,6 +12,7 @@ interface ReelActionsProps {
 }
 
 export const ReelActions: React.FC<ReelActionsProps> = ({
+  courseCode = 'IS',
   isSaved,
   isDayMode = false,
   onToggleSave,
@@ -43,97 +44,74 @@ export const ReelActions: React.FC<ReelActionsProps> = ({
     return num.toString();
   };
 
-  // Button icon wrapper styling:
-  // In Night Mode: authentic TikTok/Reels ghost icon with drop-shadow
-  // In Day Mode: crisp frosted glass pill/circle with dark olive icon for maximum contrast
-  const iconWrapperStyle = isDayMode
-    ? 'w-11 h-11 rounded-full bg-white/75 backdrop-blur-md border border-white/90 text-[#112419] flex items-center justify-center shadow-[0_2px_10px_rgba(20,40,30,0.1)] active:scale-85 transition-all'
-    : 'w-11 h-11 rounded-full bg-black/25 backdrop-blur-md border border-white/10 text-white flex items-center justify-center shadow-[0_2px_10px_rgba(0,0,0,0.4)] active:scale-85 transition-all';
-
-  const labelStyle = isDayMode
-    ? 'text-[11px] font-bold text-[#14281D] font-mono tracking-tight select-none mt-0.5'
-    : 'text-[11px] font-bold text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)] font-mono tracking-tight select-none mt-0.5';
+  const labelStyle = 'text-[11px] font-bold text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] font-mono tracking-tight select-none mt-1';
 
   return (
-    <div className="flex flex-col items-center gap-3.5 z-30 pointer-events-auto select-none" dir="ltr">
-      {/* 1. HEART / LIKE (Exact Instagram / TikTok Heart Button) */}
+    <div className="flex flex-col items-center gap-4 z-30 pointer-events-auto select-none" dir="ltr">
+      {/* 1. HEART / LIKE (Exact TikTok Heart Icon - White outline, no circular background) */}
       <button
         onClick={handleToggleLike}
-        className="flex flex-col items-center group cursor-pointer focus:outline-none"
+        className="flex flex-col items-center group cursor-pointer focus:outline-none active:scale-80 transition-transform"
         aria-label="إعجاب"
       >
-        <div className={`${iconWrapperStyle} ${animateHeart ? 'scale-125' : ''}`}>
-          <Heart
-            className={`w-[22px] h-[22px] transition-transform duration-300 ${
-              isLiked
-                ? 'fill-[#EF4444] text-[#EF4444] stroke-[#EF4444] scale-110 drop-shadow-[0_0_8px_rgba(239,68,68,0.5)]'
-                : isDayMode
-                  ? 'text-[#112419] stroke-[2.2]'
-                  : 'text-white stroke-[2.2]'
-            }`}
-          />
-        </div>
+        <Heart
+          className={`w-[32px] h-[32px] transition-all duration-300 drop-shadow-[0_2px_6px_rgba(0,0,0,0.85)] ${
+            isLiked
+              ? 'fill-[#FE2C55] text-[#FE2C55] stroke-[#FE2C55] scale-110 drop-shadow-[0_2px_12px_rgba(254,44,85,0.7)]'
+              : 'text-white stroke-white stroke-[2.2] fill-transparent hover:scale-105'
+          } ${animateHeart ? 'scale-125' : ''}`}
+        />
         <span className={labelStyle}>
           {formatNumber(likeCount)}
         </span>
       </button>
 
-      {/* 2. COMMENT / ASK AI (Exact Instagram / TikTok Bubble Icon) */}
+      {/* 2. COMMENT / ASK AI (Exact TikTok Message Bubble - Frameless) */}
       <button
         onClick={(e) => {
           e.stopPropagation();
           onOpenAsk();
         }}
-        className="flex flex-col items-center group cursor-pointer focus:outline-none"
+        className="flex flex-col items-center group cursor-pointer focus:outline-none active:scale-80 transition-transform"
         aria-label="اسأل الذكاء الاصطناعي"
       >
-        <div className={iconWrapperStyle}>
-          <MessageCircle className={`w-[22px] h-[22px] stroke-[2.2] ${isDayMode ? 'text-[#112419]' : 'text-white'}`} />
-        </div>
+        <MessageCircle className="w-[30px] h-[30px] stroke-[2.2] text-white stroke-white fill-transparent drop-shadow-[0_2px_6px_rgba(0,0,0,0.85)] hover:scale-105 transition-transform" />
         <span className={labelStyle}>
           اسأل
         </span>
       </button>
 
-      {/* 3. BOOKMARK / SAVE (Exact Instagram Reels Bookmark Icon) */}
+      {/* 3. BOOKMARK / SAVE (Exact TikTok Bookmark - Frameless, golden on save) */}
       <button
         onClick={(e) => {
           e.stopPropagation();
           onToggleSave();
         }}
-        className="flex flex-col items-center group cursor-pointer focus:outline-none"
+        className="flex flex-col items-center group cursor-pointer focus:outline-none active:scale-80 transition-transform"
         aria-label="حفظ المفهوم"
       >
-        <div className={`${iconWrapperStyle} ${isSaved ? (isDayMode ? 'bg-[#183626] text-white' : 'bg-white text-black') : ''}`}>
-          <Bookmark
-            className={`w-[22px] h-[22px] transition-all duration-300 ${
-              isSaved
-                ? isDayMode
-                  ? 'fill-white stroke-white scale-110'
-                  : 'fill-black stroke-black scale-110'
-                : isDayMode
-                  ? 'text-[#112419] stroke-[2.2]'
-                  : 'text-white stroke-[2.2]'
-            }`}
-          />
-        </div>
+        <Bookmark
+          className={`w-[30px] h-[30px] transition-all duration-300 drop-shadow-[0_2px_6px_rgba(0,0,0,0.85)] ${
+            isSaved
+              ? 'fill-[#FACE15] text-[#FACE15] stroke-[#FACE15] scale-110 drop-shadow-[0_2px_10px_rgba(250,206,21,0.6)]'
+              : 'text-white stroke-white stroke-[2.2] fill-transparent hover:scale-105'
+          }`}
+        />
         <span className={labelStyle}>
           {isSaved ? 'محفوظ' : 'حفظ'}
         </span>
       </button>
 
-      {/* 4. SHARE (Exact Instagram Direct Paper Airplane Icon) */}
+      {/* 4. SHARE (Exact TikTok Share Arrow - Frameless) */}
       <button
         onClick={(e) => {
           e.stopPropagation();
           onOpenSource();
         }}
-        className="flex flex-col items-center group cursor-pointer focus:outline-none"
+        className="flex flex-col items-center group cursor-pointer focus:outline-none active:scale-80 transition-transform"
         aria-label="المصدر والمشاركة"
       >
-        <div className={iconWrapperStyle}>
-          <Send className={`w-[21px] h-[21px] stroke-[2.2] -rotate-45 translate-x-0.5 -translate-y-0.5 ${isDayMode ? 'text-[#112419]' : 'text-white'}`} />
-        </div>
+        <Send className="w-[28px] h-[28px] stroke-[2.2] text-white stroke-white fill-transparent -rotate-45 translate-x-0.5 -translate-y-0.5 drop-shadow-[0_2px_6px_rgba(0,0,0,0.85)] hover:scale-105 transition-transform" />
         <span className={labelStyle}>
           المصدر
         </span>
@@ -145,23 +123,19 @@ export const ReelActions: React.FC<ReelActionsProps> = ({
           e.stopPropagation();
           onOpenMore();
         }}
-        className="relative mt-1 cursor-pointer group flex items-center justify-center"
+        className="relative mt-2 cursor-pointer group flex items-center justify-center active:scale-90 transition-transform"
         aria-label="الصوت الأصلي"
       >
         {/* Floating animated musical note */}
-        <div className="absolute -top-3 -left-2 pointer-events-none opacity-80 animate-bounce">
-          <Music2 className={`w-3.5 h-3.5 ${isDayMode ? 'text-[#204933]' : 'text-emerald-400'}`} />
+        <div className="absolute -top-3.5 -left-2 pointer-events-none opacity-90 animate-bounce">
+          <Music2 className="w-3.5 h-3.5 text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]" />
         </div>
 
         {/* Vinyl Disc Outer Rim */}
-        <div className={`w-10 h-10 rounded-full border-2 p-1 flex items-center justify-center animate-[spin_4s_linear_infinite] shadow-lg ${
-          isDayMode 
-            ? 'bg-[#14261C] border-white/90 shadow-black/10' 
-            : 'bg-[#181818] border-white/40 shadow-black/60'
-        }`}>
+        <div className="w-10 h-10 rounded-full border-2 border-white/60 p-1 flex items-center justify-center animate-[spin_4s_linear_infinite] shadow-xl bg-[#141816]">
           {/* Vinyl Grooves */}
-          <div className="w-full h-full rounded-full border border-dashed border-white/30 flex items-center justify-center overflow-hidden bg-gradient-to-tr from-[#0D1C13] to-[#2E543C]">
-            <span className="text-[8px] font-bold text-white font-mono">IS</span>
+          <div className="w-full h-full rounded-full border border-dashed border-white/40 flex items-center justify-center overflow-hidden bg-gradient-to-tr from-[#122A1E] to-[#2E6B45]">
+            <span className="text-[8px] font-bold text-white font-mono">{courseCode || 'IS'}</span>
           </div>
         </div>
       </div>

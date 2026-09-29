@@ -8,7 +8,6 @@ import { BackButton, CourseSelectionRow, PrimaryButton, ProgressDots, SearchFiel
 interface OnboardingProps {
   onComplete: (selectedMajor: string, selectedCourses: string[]) => void;
   isDayMode?: boolean;
-  onOpenLogin?: () => void;
 }
 
 const MAJOR_ICONS = {
@@ -47,7 +46,7 @@ function WelcomeAtmosphere() {
   </svg>;
 }
 
-export const Onboarding = ({ onComplete, onOpenLogin }: OnboardingProps) => {
+export const Onboarding = ({ onComplete }: OnboardingProps) => {
   const [step, setStep] = useState<1 | 2 | 3>(1);
   const [selectedMajor, setSelectedMajor] = useState<string>(() => savedSelection('scroll_it_phase1_major', ''));
   const [selectedCourses, setSelectedCourses] = useState<string[]>(() => savedSelection('scroll_it_phase1_courses', []));
@@ -86,7 +85,6 @@ export const Onboarding = ({ onComplete, onOpenLogin }: OnboardingProps) => {
         </div>
         <div className="si-welcome-actions">
           <PrimaryButton onClick={() => setStep(2)}>ابدأ</PrimaryButton>
-          <SecondaryButton onClick={() => onOpenLogin?.()}>عندي حساب</SecondaryButton>
         </div>
       </div>
     </section>}
