@@ -134,11 +134,12 @@ export const ReelMedia: React.FC<ReelMediaProps> = ({
           <video
             ref={videoRef}
             src={mediaFile}
-            autoPlay
+            autoPlay={isActive}
             muted
             loop
             playsInline
-            className="absolute inset-0 w-full h-full object-cover"
+            preload={isActive ? 'metadata' : 'none'}
+            className="absolute inset-0 w-full h-full object-contain"
             onTimeUpdate={(event) => {
               const video = event.currentTarget;
               if (Number.isFinite(video.duration) && video.duration > 0) {
